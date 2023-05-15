@@ -37,7 +37,8 @@ def plot_latent(model, data_loader, num_batches=100, device=device):
     for idx, data in enumerate(data_loader):
 
         x, y = data
-        z = model.encoder(x.to(device))  # Encode image data
+        model(x.to(device))
+        z = model.z.to(device)  # Encode image data
         z = z.to('cpu').detach().numpy()  # Get numpy version of data in latent space
 
         # 2D latent space (single image)
@@ -88,6 +89,7 @@ def plot_latent(model, data_loader, num_batches=100, device=device):
             if np.size(z, axis=1) == 2:
                 plt.colorbar()
             break
+    plt.show()
 
 
 def plot_reconstructed(autoencoder, r0=(-3, 3), r1=(-3, 3), n=12):
