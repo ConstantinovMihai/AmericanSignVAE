@@ -13,7 +13,6 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 # Additional Setup to use Tensorboard
 # !pip install -q tensorflow
 # %load_ext tensorboard
-
 mnist_data = CustomImageDataset('sign_mnist_train.csv', transform=ToTensor())
 # mnist_data = datasets.MNIST('./data',
 #              transform=transforms.ToTensor(),

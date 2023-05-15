@@ -7,6 +7,7 @@ from torchvision import datasets, transforms
 from tqdm import tqdm
 
 from Conv_VAE import ConvVarAutoencoder
+from loader import CustomImageDataset
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -45,14 +46,19 @@ def train_vae(train_loader, net, optimizer, device=device):
     return avg_loss / len(train_loader)
 
 
-# mnist_data = CustomImageDataset('sign_mnist_train.csv', transform=ToTensor())
-mnist_data = datasets.MNIST('./data',
-                            transform=transforms.ToTensor(),
-                            download=True)
+normalize = transforms.Normalize(160, 50)
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    normalize
+])
+mnist_data = CustomImageDataset('sign_mnist_train.csv', transform=transform)
+# mnist_data = datasets.MNIST('./data',
+#                             transform=transforms.ToTensor(),
+#                             download=True)
 
 # Put it into a dataloader for easier handling in pytorch
 mnist_loader = torch.utils.data.DataLoader(mnist_data, batch_size=128, shuffle=False)
-
+# 159.29443 48.70142
 # Create a writer to write to Tensorboard
 writer = SummaryWriter()
 

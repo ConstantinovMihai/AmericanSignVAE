@@ -79,7 +79,6 @@ def plot_latent(model, data_loader, num_batches=100, device=device):
             ax2.scatter(z[:, 0], z[:, 1], c=y, cmap='tab10');
             ax3.scatter(z[:, 0], z[:, 2], c=y, cmap='tab10');
             ax4.scatter(z[:, 1], z[:, 2], c=y, cmap='tab10');
-
             if idx > num_batches:
                 fig1.tight_layout()
                 fig2.tight_layout()
@@ -89,7 +88,6 @@ def plot_latent(model, data_loader, num_batches=100, device=device):
             if np.size(z, axis=1) == 2:
                 plt.colorbar()
             break
-    plt.show()
 
 
 def plot_reconstructed(autoencoder, r0=(-3, 3), r1=(-3, 3), n=12):
