@@ -37,8 +37,8 @@ def plot_latent(model, data_loader, num_batches=100, device=device):
     for idx, data in enumerate(data_loader):
 
         x, y = data
-        model(x.to(device))
-        z = model.z.to(device)  # Encode image data
+        z = model.encoder(x.to(device))
+        # Encode image data
         z = z.to('cpu').detach().numpy()  # Get numpy version of data in latent space
 
         # 2D latent space (single image)

@@ -3,13 +3,10 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import TensorDataset
 from torch.utils.tensorboard import SummaryWriter
-from torch.utils.tensorboard import SummaryWriter
 from torchvision import datasets, transforms
-from torchvision.transforms import ToTensor
 from tqdm import tqdm
 
 from Conv_VAE import ConvVarAutoencoder
-from loader import CustomImageDataset
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -38,7 +35,7 @@ def train_vae(train_loader, net, optimizer, device=device):
         # forward + backward + optimize
         outputs = net(inputs)
 
-        loss = ((inputs - outputs) ** 2).sum() + net.kl
+        loss = ((inputs - outputs) ** 2).sum() + net.encoder.kl
         loss.backward()
         optimizer.step()
 
@@ -50,8 +47,8 @@ def train_vae(train_loader, net, optimizer, device=device):
 
 # mnist_data = CustomImageDataset('sign_mnist_train.csv', transform=ToTensor())
 mnist_data = datasets.MNIST('./data',
-             transform=transforms.ToTensor(),
-            download=True)
+                            transform=transforms.ToTensor(),
+                            download=True)
 
 # Put it into a dataloader for easier handling in pytorch
 mnist_loader = torch.utils.data.DataLoader(mnist_data, batch_size=128, shuffle=False)
@@ -69,13 +66,12 @@ criterion = F.mse_loss
 optimizer = optim.Adam(model.parameters(), lr=5e-4, weight_decay=0.1)
 
 # Set the number of epochs to for training
-epochs = 50
+epochs = 5
 for epoch in tqdm(range(epochs)):  # loop over the dataset multiple times
     # Train on data
     train_loss = train_vae(mnist_loader, model, optimizer, device)
-    print(train_loss.item(), model.kl.item(), end='\n')
+    print(train_loss.item(), model.encoder.kl.item(), end='\n')
     # Write metrics to Tensorboard
     writer.add_scalars("Loss", {'Train': train_loss}, epoch)
     if epoch % 10 == 0:
         torch.save(model.state_dict(), "model.pt")
-

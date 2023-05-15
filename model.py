@@ -92,10 +92,6 @@ class VarEncoder(nn.Module):
         sig = torch.exp(self.linear3_1(x1))
         mu = self.linear3_2(x2)
 
-        ########################################################################
-        #                         END OF YOUR CODE                             #
-        ########################################################################
-
         # reparameterize to find z
         z = self.reparameterize(mu, sig)
 
