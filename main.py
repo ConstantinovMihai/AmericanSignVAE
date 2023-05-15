@@ -5,6 +5,7 @@ from torch.utils.data import TensorDataset
 from torchvision.transforms import ToTensor
 from Conv_VAE import ConvVarAutoencoder
 from loader import CustomImageDataset
+from test import test
 from utils import plot_latent, plot_reconstructed
 
 plt.rcParams['figure.dpi'] = 200
@@ -23,5 +24,5 @@ mnist_loader = torch.utils.data.DataLoader(mnist_data, batch_size=128, shuffle=F
 
 model = ConvVarAutoencoder().to(device)
 model.load_state_dict(torch.load("model.pt", map_location=device))
-plot_latent(model, mnist_loader)
+#plot_latent(model, mnist_loader)
 #plot_reconstructed(model)

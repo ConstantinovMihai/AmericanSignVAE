@@ -4,6 +4,7 @@ import torch.optim as optim
 from torch.utils.data import TensorDataset
 from torch.utils.tensorboard import SummaryWriter
 from torchvision import datasets, transforms
+from torchvision.utils import save_image
 from tqdm import tqdm
 
 from Conv_VAE import ConvVarAutoencoder
@@ -69,10 +70,10 @@ model = ConvVarAutoencoder().cuda()
 # Create loss function and optimizer
 criterion = F.mse_loss
 
-optimizer = optim.Adam(model.parameters(), lr=5e-4, weight_decay=0.1)
+optimizer = optim.Adam(model.parameters(), lr=1e-3, weight_decay=0.1)
 
 # Set the number of epochs to for training
-epochs = 5
+epochs = 50
 for epoch in tqdm(range(epochs)):  # loop over the dataset multiple times
     # Train on data
     train_loss = train_vae(mnist_loader, model, optimizer, device)
@@ -81,3 +82,8 @@ for epoch in tqdm(range(epochs)):  # loop over the dataset multiple times
     writer.add_scalars("Loss", {'Train': train_loss}, epoch)
     if epoch % 10 == 0:
         torch.save(model.state_dict(), "model.pt")
+        with torch.no_grad():
+            sample = torch.randn(64, 2048).to(device)
+            sample = model.decoder(sample).cpu()
+            save_image(sample.view(64, 1, 28, 28),
+                       'results/' + str(epoch) + '.png')
