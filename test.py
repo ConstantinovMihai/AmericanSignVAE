@@ -48,11 +48,12 @@ mnist_loader = torch.utils.data.DataLoader(mnist_data, batch_size=128, shuffle=F
 mnist_loader = torch.utils.data.DataLoader(mnist_data, batch_size=128, shuffle=False)
 
 model = ConvVarAutoencoder().to(device)
-model.load_state_dict(torch.load("model.pt", map_location=device))
+model.load_state_dict(torch.load("model_good_50.pt", map_location=device))
 writer = SummaryWriter()
 epochs = 5
 for epoch in tqdm(range(epochs)):  # loop over the dataset multiple times
     # Test
     test_loss = test(epoch, model, mnist_loader)
+    print(test_loss)
     # Write metrics to Tensorboard
     #writer.add_scalars("Loss", {'Train': test_loss}, epoch)

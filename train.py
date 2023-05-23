@@ -81,7 +81,7 @@ for epoch in tqdm(range(epochs)):  # loop over the dataset multiple times
     # Write metrics to Tensorboard
     writer.add_scalars("Loss", {'Train': train_loss}, epoch)
     if epoch % 10 == 0:
-        torch.save(model.state_dict(), "model.pt")
+        torch.save(model.state_dict(), "model_good_50.pt")
         with torch.no_grad():
             sample = torch.randn(64, 2048).to(device)
             sample = model.decoder(sample).cpu()

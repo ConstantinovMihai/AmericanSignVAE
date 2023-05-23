@@ -12,6 +12,8 @@ class Decoder(nn.Module):
     def __init__(self):
         super(Decoder, self).__init__()
         # Sampling vector
+        # increase final feature map size
+        # less layers, bigger kernels?
         self.fc3 = nn.Linear(2048, 2048)
         self.fc_bn3 = nn.BatchNorm1d(2048)
         self.fc4 = nn.Linear(2048, 7 * 7 * 16)
@@ -26,8 +28,6 @@ class Decoder(nn.Module):
         self.relu = nn.ReLU()
 
     def forward(self, z):
-
-
         fc3 = self.relu(self.fc_bn3(self.fc3(z)))
         fc4 = self.relu(self.fc_bn4(self.fc4(fc3))).view(-1, 16, 7, 7)
         conv5 = self.relu(self.bn5(self.conv5(fc4)))
@@ -41,7 +41,7 @@ class Decoder(nn.Module):
 class Encoder(nn.Module):
     def __init__(self):
         super(Encoder, self).__init__()
-
+        # tune parameters?
         self.conv1 = nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(16)
         self.conv2 = nn.Conv2d(16, 32, kernel_size=3, stride=2, padding=1, bias=False)
