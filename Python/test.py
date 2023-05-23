@@ -4,8 +4,8 @@ from torchvision import transforms
 from torchvision.utils import save_image
 from tqdm import tqdm
 
-from Conv_VAE import ConvVarAutoencoder
-from loader import CustomImageDataset
+from Python.Conv_VAE import ConvVarAutoencoder
+from Python.loader import CustomImageDataset
 
 device = 'cuda'
 
@@ -37,7 +37,7 @@ transform = transforms.Compose([
     transforms.ToTensor(),
     normalize
 ])
-mnist_data = CustomImageDataset('sign_mnist_test.csv', transform=transform)
+mnist_data = CustomImageDataset('../data/sign_mnist_test.csv', transform=transform)
 # mnist_data = datasets.MNIST('./data',
 #                             transform=transforms.ToTensor(),
 #                             download=True)
@@ -48,7 +48,7 @@ mnist_loader = torch.utils.data.DataLoader(mnist_data, batch_size=128, shuffle=F
 mnist_loader = torch.utils.data.DataLoader(mnist_data, batch_size=128, shuffle=False)
 
 model = ConvVarAutoencoder().to(device)
-model.load_state_dict(torch.load("model_good_50.pt", map_location=device))
+model.load_state_dict(torch.load("../model_good_50.pt", map_location=device))
 writer = SummaryWriter()
 epochs = 5
 for epoch in tqdm(range(epochs)):  # loop over the dataset multiple times

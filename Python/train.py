@@ -3,12 +3,12 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import TensorDataset
 from torch.utils.tensorboard import SummaryWriter
-from torchvision import datasets, transforms
+from torchvision import transforms
 from torchvision.utils import save_image
 from tqdm import tqdm
 
-from Conv_VAE import ConvVarAutoencoder
-from loader import CustomImageDataset
+from Python.Conv_VAE import ConvVarAutoencoder
+from Python.loader import CustomImageDataset
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -52,7 +52,7 @@ transform = transforms.Compose([
     transforms.ToTensor(),
     normalize
 ])
-mnist_data = CustomImageDataset('sign_mnist_train.csv', transform=transform)
+mnist_data = CustomImageDataset('../data/sign_mnist_train.csv', transform=transform)
 # mnist_data = datasets.MNIST('./data',
 #                             transform=transforms.ToTensor(),
 #                             download=True)
@@ -81,7 +81,7 @@ for epoch in tqdm(range(epochs)):  # loop over the dataset multiple times
     # Write metrics to Tensorboard
     writer.add_scalars("Loss", {'Train': train_loss}, epoch)
     if epoch % 10 == 0:
-        torch.save(model.state_dict(), "model_good_50.pt")
+        torch.save(model.state_dict(), "../model_good_50.pt")
         with torch.no_grad():
             sample = torch.randn(64, 2048).to(device)
             sample = model.decoder(sample).cpu()
